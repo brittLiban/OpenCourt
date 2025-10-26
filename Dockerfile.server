@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -8,6 +8,16 @@ COPY src/server/package*.json ./
 
 RUN npm install
 
+COPY src/server/ ./
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /usr/local/bin/pm2 /usr/local/bin/pm2
+COPY --from=builder /usr/local/lib/node_modules/pm2 /usr/local/lib/node_modules/pm2
+
+COPY --from=builder /app/node_modules ./node_modules
 COPY src/server/ ./
 
 EXPOSE 3000
