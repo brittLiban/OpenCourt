@@ -1,11 +1,11 @@
 export async function getGames() {
-  const res = await fetch(`/games`);
+  const res = await fetch(`/api/games`);
   if (!res.ok) throw new Error("Failed to fetch games");
   return res.json();
 }
 
 export async function createGame(gameData) {
-  const res = await fetch(`/games`, {
+  const res = await fetch(`/api/games`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(gameData),
