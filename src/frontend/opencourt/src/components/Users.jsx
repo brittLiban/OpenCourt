@@ -9,7 +9,7 @@ function Users() {
     getUsers()
       .then(setUsers)
       .catch((err) => console.error("Error fetching events:", err));
-  }, [users]);
+  }, []);
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>

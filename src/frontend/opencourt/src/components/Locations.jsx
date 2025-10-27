@@ -9,7 +9,7 @@ function Locations() {
     getLocations()
       .then(setLocations)
       .catch((err) => console.error("Error fetching events:", err));
-  }, [locations]);
+  }, []);
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
