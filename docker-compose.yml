@@ -28,7 +28,9 @@ services:
       - opencourt-net
 
   db:
-    image: mysql:8.0
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -39,8 +41,6 @@ services:
       - "3307:3306"
     volumes:
       - db-data:/var/lib/mysql
-      - ./src/database/create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
-      - ./src/database/seed_tables.sql:/docker-entrypoint-initdb.d/2_seed_tables.sql
     networks:
       - opencourt-net
 
