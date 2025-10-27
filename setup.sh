@@ -44,7 +44,7 @@ cp "$TEMPLATE_FILE" "$ENV_FILE"
 
 sed -i "s/DB_HOST = \"\"/DB_HOST = \"db\"/" "$ENV_FILE"
 sed -i "s/DB_USER = \"\"/DB_USER = \"$DB_USER\"/" "$ENV_FILE"
-sed -i "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FIL"
+sed -i "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FILE"
 sed -i "s/DB_NAME = \"\"/DB_NAME = \"$DB_NAME\"/" "$ENV_FILE"
 sed -i "s/DB_PORT =/DB_PORT = 3306/" "$ENV_FILE"
 
@@ -60,4 +60,4 @@ docker-compose up -d --build
 echo "---"
 echo "Setup Complete!"
 echo "Your application is running."
-echo "Connect to MySQL Workbench at: <your-vm-ip-address>:3306 (User: $DB_USER)"
+echo "Connect to MySQL Workbench at: <your-vm-ip-address>:3307 (User: $DB_USER)"
