@@ -9,7 +9,7 @@ function Games() {
     getGames()
       .then(setGames)
       .catch((err) => console.error("Error fetching events:", err));
-  }, [games]);
+  }, []);
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>

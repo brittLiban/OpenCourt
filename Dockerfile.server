@@ -1,0 +1,17 @@
+FROM node:lts-alpine
+
+RUN npm install -g pm2
+
+WORKDIR /app
+
+COPY src/server/package*.json ./
+
+RUN npm install
+
+COPY src/server/ ./
+
+EXPOSE 3000
+
+ENTRYPOINT ["pm2-runtime"]
+
+CMD ["server.js"]

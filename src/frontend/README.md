@@ -1,5 +1,14 @@
 # Frontend
 
+## Copy template.env Instructions
+1. Duplicate the file, you can do this manually or through the VM.
+2. Name the file '.env' (just the extension)
+3. fill in the missing information :)
+
+VITE_SERVER_HOST = "" # Server Host (VM's IP Address)
+
+VITE_SERVER_PORT = "" # Server Port (3000)
+
 ## Quick Start
 - Open folder `cd src/frontend/opencourt`
 - Install dependencies `npm i`

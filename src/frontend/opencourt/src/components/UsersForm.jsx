@@ -19,7 +19,7 @@ function Users(){
         e.preventDefault();
         
         try {
-        const res = await fetch(`http://${import.meta.env.VITE_SERVER_HOST}:3000/users`, {
+        const res = await fetch(`/api/users`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(formData)

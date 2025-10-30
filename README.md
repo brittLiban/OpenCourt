@@ -3,36 +3,34 @@
 
 ## Table of Contents
 1. [Project Description](#project-description)
-1. [The Plan](#the-plan)
-1. [Prerequisites](#prerequisites)
-1. [Building the Application](#building-the-application)
-1. [Running the Application](#running-the-application)
-1. [VM Setup](#vm-setup)
+2. [The Plan](#the-plan)
+3. [Known Issues](#known-issues)
+3. [Prerequisites](#prerequisites)
+4. [VM Setup](#vm-setup)
+5. [Local Setup](#local-setup)
 
 ## Project Description
 OpenCourt solves the problem of not being able to easily find open play locations for sports like pickleball, basketball, tennis, volleyball, and more.
 
 ### Current Features
-- End-to-End data
-    - MySQL database
-        - Tables: users, locations, games, and games_users
-        - Configured for workbench access
-        - Scripts for creating and seeding databases included
-    - MVC-style API
-        - Deployed with PM2
-        - Basic CRUD functionality
-            - Create: Add a user, location, or game
-            - Read: View all users, locations, or games
-        - Basic data validation in the controller
-    - React + Vite frontend application 
-        - Components: Games, Locations, Users
-        - Connects to API through fetch calls on button clicks
-        - Uses state to manage form data, error handling
-        - Basic data validation
-- Simple frontend for client testing
-    - React + Vite frontend application
-        - Simple, responsive UI
-        - useful frontend errors
+- Fully Dockerized Stack
+    - The entire application (frontend, backend, and database) is containerized with Docker Compose for portability and ease of setup
+- Automated Setup Scripts
+    - Includes scripts for prepping a new VM and for setting up the application locally or on a VM
+- Nginx Reverse Proxy
+    - A web container runs Nginx to serve the static React build and act as a reverse proxy for the backend, eliminating CORS issues.
+- MySQL database
+    - Tables: users, locations, games, and games_users
+    - Configured for remote Workbench access on port 3307
+    - Runs in its own Docker container
+    - Automatically creates tables and seeds data on first launch
+- MVC-style API
+    - Runs in a Node.js container using PM2 for process management.
+    - Basic CRUD functionality (Create/Read) for users, locations, and games.
+- React + Vite frontend application 
+    - Connects to the proxied /api/ endpoints.
+    - Components for Games, Locations, and Users.
+    - Simple, responsive UI
 
 ## The Plan
 - Extend CRUD functionality
@@ -66,153 +64,137 @@ A user can either **host** or **participate** in an event.
     - can browse and join events.
     - can leave an event anytime.
 
+## Known Issues
+
+There is currently an issue where when an event, location, or user is added to the database, it is not immediately reflected on the website. The user has to refresh the page for the newest addition to display. This is not a Docker Issue and so was not addressed during this Sprint.
+
 ## Prerequisites
-### [Set up VM](#vm-setup) (Do This First!)
 
-### Set up Local Database Connection
-1. Open MySQL Workbench
-2. Go to *Database=>Connect to Database*
-3. Fill in the database information you configured in your VM
-- Create the tables by pasting and running the contents of [create_tables](src/database/create_tables.sql) in MySQL Workbench
-- **Optionally** populate the tables using [seed_tables](src/database/seed_tables.sql)
-
-## Building the Application
-### Configure environment variables
-1. Duplicate and fill out the [frontend env](src/frontend/opencourt/template.env)
-2. Duplicate and fill out the [root env](template.env)
-
-#### In Linux (The VM)
-```bash
-cp template.env .env
-nano .env
-# Then fill out the env file
-```
-### Install all packages
-From root, run the following lines to install all required packages:
-```bash
-cd src/server
-npm i
-cd ../frontend/opencourt
-npm i
-```
-## Running the Application
-### Development
-For local development, run:
-```bash
-cd src/server
-npm run pm2
-cd ../frontend/opencourt
-npm run dev
-```
-*Note: If you need to force pm2 to stop, run `npm run pm2-stop`. See [package.json](/src/server/package.json) for more useful server scripts.*
-
-### Deployment - *Frontend and backend both running in the VM*
-
-To deploy, run from the root of the project:
-```bash
-bash start.sh
-```
-
+- Docker Desktop (for Local Development): You must have Docker Desktop installed and running on your local machine to use [setup-local.sh](setup-local.sh)
 
 ## VM Setup
 1. Open a terminal on your local machine
-1. Log into your VM using your IP Address and Password
+2. Log into your VM using your IP Address and Password:
+    
     ```bash
     ssh root@{vm-ip-address}
     ```
-### System Setup
-Update the package index and upgrade exisiting packages
+3. Run the following command to update your VM and install Git:
+
+    ```bash
+    sudo apt update && sudo apt install git -y && sudo DEBIAN_FRONTEND=noninteractive apt upgrade -yq
+    ```
+4. Clone the repo:
+
+    ```bash
+    git clone https://github.com/kellerflint/OpenCourt.git
+    ```
+
+5. CD into the project and make the scripts executable:
+
+    ```bash
+    CD OpenCourt/
+    chmod +x prepare-vm.sh setup.sh
+    ```
+
+6. Run the VM Setup Script:
+    - This will install Docker, Compose, Curl, and set the firewall
+
+    ```bash
+    sudo ./prepare-vm.sh
+    ```
+
+### IMPORTANT: Log out and back in - This is required for your user to be added to the docker group
+
+7. Run the Application Setup Script:
+    - This will build your containers, handle .env and nginx.conf configuration, and start your application
+
+    ```bash
+    ./setup.sh
+    ```
+
+8. Follow Prompts: The script will ask you to enter what passwords you want to use for database access
+
+9. Access Your Application:
+    - Website: http://your-vm-ip
+    - MySQL Workbench:
+        - Host: your-vm-ip
+        - Port: 3307
+        - Username: app_user
+        - Password: The app_user password you chose during setup
+
+## Updating the Application on the VM
+
+When you push new code to your repo, run the [update.sh](update.sh) script to deploy them.
+
+1. SSH into your VM and CD to OpenCourt/
+2. Activate and run the script
+
+    ```bash
+    chmod +x update.sh
+    ./update.sh
+    ```
+
+This will pull the latest code and rebuild only the necessary containers. Your database data will be preserved
+
+### IMPORTANT - This script does NOT apply database schema changes. To apply changes to tables, you must destroy the database volume and then run docker-compose up -d --build
+
+- Command to destroy database volume
+
+    ```bash
+    docker-compose down -v
+    ```
+
+## Local Setup
+1. Clone the repo:
+
+    ```bash
+    git clone https://github.com/kellerflint/OpenCourt.git
+    ```
+2. Ensure Docker Desktop is running
+
+3. Make script executable and run it:
+    - This will build your containers, handle .env and nginx.conf configuration, and start your application
+
+    ```bash
+    chmod +x setup-local.sh
+    ./setup-local.sh
+    ```
+
+4. Follow Prompts: The script will ask you to enter what passwords you want to use for database access
+
+9. Access Your Application:
+    - Website: http://localhost
+    - MySQL Workbench:
+        - Host: localhost
+        - Port: 3307
+        - Username: app_user
+        - Password: The app_user password you set during setup
+
+### Updating Locally
+
+From the root directory, run the following command:
 
 ```bash
-sudo apt update
-yes | sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq upgrade
+docker-compose up -d --build
 ```
 
-### Core Dependencies
-1. Install Git
-    ```bash
-    sudo apt install git
-    ```
-1. Install MySQL
-    ```bash
-    sudo apt install mysql-server
-    ```
-1. Install Node.js using NVM
-    ```bash
-    sudo apt-get install curl
-    ```
-    ```bash
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-    ```
-    ```bash
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    ```
-    ```bash
-    nvm install --lts
-    ```
-### MySQL Configuration
-#### Modify the bind-address
-1. Open the MySQL config file
-    ```bash
-    sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
-    ```
-1. Change the bind-address value from **127.0.0.1**
- to **0.0.0.0**
-1. Save and exit (Crtl+O, Enter, Ctrl+X)
-#### Create a user
-1. Log into MySQl as root
-    ```bash
-    mysql -u root -p
-    # When prompted, enter root password
-    ```
-1. Create a new user (replace 'student' and 'yourpassword' with your chosen credentials)
-    ```sql
-    CREATE USER 'student'@'%' IDENTIFIED BY 'yourpassword';
-    ```
-#### Give the user external host connection permissions
-1. View your current databases
-    ``` sql
-    SHOW DATABASES;
-    ```
-1. Pick an existing database or create a new one
-    ```sql
-    CREATE DATABASE opencourt;
-    -- this is the name you will use in the .env
-    ```
-1. Grant permissions
-    ```sql
-    GRANT ALL PRIVILEGES ON opencourt.* TO '{your-username}'@'%';
-    FLUSH PRIVILEGES;
-    ```
-1. Verify your permissions
-    ```sql
-    SHOW GRANTS FOR '{your-username}'@'%';
-    ```
-1. Exit
-    ```sql
-    EXIT;
-    ```
-#### Open port 3006 in the firewall
-```bash
-sudo ufw allow 3306/tcp
-sudo ufw reload
-```
-### Process Management
-```bash
-# Install PM2 globally
-npm install -g pm2
+This will rebuild the images for the code you changed and restart the containers. Your MySQL database data will be preserved.
 
-# Keep PM2 alive on reboot
-pm2 startup
-pm2 save
-```
-### Application Deployment
-1. Clone this repository into a folder in you VM 
-1. Complete the steps in [Building the Application](#building-the-application) in the VM
+If you need to apply changes to the database and reset your data, your must destroy the database volume:
 
-To deploy, run from the root of the project:
 ```bash
-bash start.sh
+# This stops and removes containers AND destroys the database volume
+docker-compose down -v
+
+# This rebuilds all images and starts fresh containers
+docker-compose up -d --build
+```
+
+### Restarting Docker
+
+If your application freezes (either on the VM or locally) and there have been no code changes, run the following command to restart Docker:
+
+```bash
+docker-compose restart
 ```
