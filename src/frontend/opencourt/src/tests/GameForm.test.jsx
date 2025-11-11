@@ -41,8 +41,8 @@ describe("GamesForm component", () => {
     }));
 
     // inputs should be cleared after submission
-    expect(gameInput).toHaveValue("");
-    expect(locationInput).toHaveValue("");
+    expect(gameInput).toHaveDisplayValue("");
+    expect(locationInput).toHaveDisplayValue("");
   });
 
   it("displays error when API returns error", async () => {
