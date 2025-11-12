@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Container } from "@mui/material";
 
-function Users(){
+function Users({onAddUser}){
     const [formData, setFormData] = useState({
         user_name: ""
     });
@@ -29,6 +29,7 @@ function Users(){
         if (data.error) {
             setError("Invalid Input");
         }
+        onAddUser({user_name: formData.user_name});
 
         setFormData({user_name: ""});
         } catch (err) {
