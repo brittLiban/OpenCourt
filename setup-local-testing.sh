@@ -65,7 +65,7 @@ cp "$TEMPLATE_NGINX_FILE" "$NGINX_CONF_FILE"
 sed -i "" "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
 
 echo "Building and starting all containers (web, backend, db)"
-docker-compose -f docker-compose.test.yml up -d --build
+docker-compose -p opencourt_test -f docker-compose.test.yml up -d --build
 
 echo "---"
 echo "Setup Complete!"
