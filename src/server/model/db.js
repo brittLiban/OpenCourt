@@ -1,11 +1,18 @@
 const mysql = require('mysql2')
 const Database = require('better-sqlite3')
+const fs = require('fs')
 
 let db;
 
-if (process.env.RUN_MODE === 'test') {
+if (process.env.RUN_MODE === 'test' || process.env.RUN_MODE === 'cypress') {
   // Create database in memory
   let sqlite = new Database(':memory:');
+
+  const initDb = fs.readFileSync('./test/database/initTests.sql', 'utf8');
+  sqlite.exec(initDb);
+
+  const seedDb = fs.readFileSync('./test/database/seedTests.sql', 'utf8');
+  sqlite.exec(seedDb);
 
   // wrapper db object for sqlite
   db = {

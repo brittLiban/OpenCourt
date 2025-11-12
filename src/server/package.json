@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "cross-env RUN_MODE=test jest",
+    "cypress": "cross-env RUN_MODE=cypress node server.js",
     "start": "node server.js",
     "pm2": "pm2 start server.js --watch",
     "pm2-stop": "pm2 stop server.js",
