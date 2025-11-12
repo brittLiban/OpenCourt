@@ -69,5 +69,5 @@ docker-compose -p opencourt_test -f docker-compose.test.yml up -d --build
 
 echo "---"
 echo "Setup Complete!"
-echo "Your application is running at: http://localhost"
+echo "Your application is running at: http://localhost:3005"
 echo "Connect to MySQL Workbench at: localhost:3307 (User: $DB_USER)"
