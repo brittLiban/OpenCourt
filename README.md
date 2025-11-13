@@ -218,12 +218,20 @@ A script has been written to help quickly set up a dockerized test environment p
 
 1. Ensure Docker Desktop is running
 2. Make script executable and run it:
-    - This will automatically run all build all docker containers, handle any database configuration and launch the cypress terminal for you to use.
+    - This will automatically run and build all docker containers, handle any database configuration and launch the cypress terminal for you to use.
 
     ```bash
     chmod +x ./test-scripts/run-e2e-tests.sh
     ./test-scripts/run-e2e-tests.sh
     ```
+
+### Have you already built the test environment and want to just run the end to end tests?
+1. Make sure you are in the proper directory for the front-end.
+2. Check that the opencourt_test docker container is running.
+3. Run the following command in your terminal to run **just** the cypress tests.
+```bash
+    npm run cypress
+```
 
 #### Need to test changes you've made in the code?
 ```bash
