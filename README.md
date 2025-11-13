@@ -221,8 +221,8 @@ A script has been written to help quickly set up a dockerized test environment p
     - This will automatically run all build all docker containers, handle any database configuration and launch the cypress terminal for you to use.
 
     ```bash
-    chmod +x ./tests/run-e2e-tests.sh
-    ./tests/run-e2e-tests.sh
+    chmod +x ./test-scripts/run-e2e-tests.sh
+    ./test-scripts/run-e2e-tests.sh
     ```
 
 #### Need to test changes you've made in the code?
