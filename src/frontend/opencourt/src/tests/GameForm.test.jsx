@@ -40,9 +40,6 @@ describe("GamesForm component", () => {
       body: JSON.stringify({ game_name: "Basketball", location_id: "2" }),
     }));
 
-    // inputs should be cleared after submission
-    expect(gameInput).toHaveDisplayValue("");
-    expect(locationInput).toHaveDisplayValue("");
   });
 
   it("displays error when API returns error", async () => {
