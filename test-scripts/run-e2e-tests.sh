@@ -28,10 +28,10 @@ echo "==============================="
 echo "🔄 Restarting Docker container(s)"
 echo "==============================="
 
-cd $SCRIPT_DIR../
+cd $SCRIPT_DIR/
 
-docker compose -f "$SCRIPT_DIR/../docker-compose.test.yml" down
-docker compose -f "$SCRIPT_DIR/../docker-compose.test.yml" up -d --build
+docker compose -p opencourt_test -f "$SCRIPT_DIR/../docker-compose.test.yml" down
+docker compose -p opencourt_test -f "$SCRIPT_DIR/../docker-compose.test.yml" up -d
 
 
 echo "Docker containers restarted successfully!"
