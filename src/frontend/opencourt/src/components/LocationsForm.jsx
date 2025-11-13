@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Container } from "@mui/material";
 
-function LocationsForm({onAddLocation}){
+function LocationsForm(){
     const [formData, setFormData] = useState({
         location_name: "",
         address: ""
@@ -31,7 +31,6 @@ function LocationsForm({onAddLocation}){
                 setError("Invalid Input");
         }
 
-        onAddLocation({location_name: formData.location_name, address: formData.address});
 
         setFormData({location_name: "", address: ""});
         } catch (err) {

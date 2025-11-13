@@ -12,14 +12,11 @@ function LocationsPage() {
         .catch((err) => console.error("Error fetching events:", err));
     }, []);
 
-    const addLocation = (newLocation) => {
-        setLocations(prevLocations => [...prevLocations, newLocation]);
-    };
 
     return( 
     <>
         <Locations locations={locations} />
-        <LocationsForm onAddLocation={addLocation} />
+        <LocationsForm />
     </>
     );
 }
