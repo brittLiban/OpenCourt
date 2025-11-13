@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
 import { Container, Typography, List, ListItem, ListItemText } from "@mui/material";
-import { getUsers } from "../api/Users";
 
-function Users() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    getUsers()
-      .then(setUsers)
-      .catch((err) => console.error("Error fetching events:", err));
-  }, []);
+function Users({users}) {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>

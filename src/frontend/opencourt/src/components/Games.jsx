@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
 import { Container, Typography, List, ListItem, ListItemText } from "@mui/material";
-import { getGames } from "../api/Games.js";
 
-function Games() {
-  const [games, setGames] = useState([]);
-
-  useEffect(() => {
-    getGames()
-      .then(setGames)
-      .catch((err) => console.error("Error fetching events:", err));
-  }, []);
+function Games({games}) {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
