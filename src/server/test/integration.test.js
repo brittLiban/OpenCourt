@@ -5,18 +5,20 @@ const fs = require('fs')
 
 
 beforeEach( async () => {
+    await db.restart();
+
     // initialize db tables
-    const initDb = fs.readFileSync('./tests/database/initTests.sql', 'utf8');
+    const initDb = fs.readFileSync('./test/database/initTests.sql', 'utf8');
     await db.exec(initDb);
 
     // seed db
-    const seedDb = fs.readFileSync('./tests/database/seedTests.sql', 'utf8');
+    const seedDb = fs.readFileSync('./test/database/seedTests.sql', 'utf8');
     await db.exec(seedDb);
     
 })
 
 afterEach( async () => {
-    await db.restart()
+    await db.restart();
 })
 
 
