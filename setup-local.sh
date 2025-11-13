@@ -1,5 +1,13 @@
 #!/bin/bash
 
+OSTYPE=$(uname -s)
+if[OSTYPE == "Linux"]; then
+  SED="sed -i ''"
+else
+  SED="sed -i"
+fi
+
+
 DB_USER="app_user"
 DB_NAME="opencourt"
 ENV_FILE=".env"
@@ -49,11 +57,11 @@ echo
 echo "Creating .env file"
 cp "$TEMPLATE_ENV_FILE" "$ENV_FILE"
 
-sed -i "s/DB_HOST = \"\"/DB_HOST = \"db\"/" "$ENV_FILE"
-sed -i "s/DB_USER = \"\"/DB_USER = \"$DB_USER\"/" "$ENV_FILE"
-sed -i "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FILE"
-sed -i "s/DB_NAME = \"\"/DB_NAME = \"$DB_NAME\"/" "$ENV_FILE"
-sed -i "s/DB_PORT =/DB_PORT = 3306/" "$ENV_FILE"
+$SED -i "s/DB_HOST = \"\"/DB_HOST = \"db\"/" "$ENV_FILE"
+$SED -i "s/DB_USER = \"\"/DB_USER = \"$DB_USER\"/" "$ENV_FILE"
+$SED -i "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FILE"
+$SED -i "s/DB_NAME = \"\"/DB_NAME = \"$DB_NAME\"/" "$ENV_FILE"
+$SED -i "s/DB_PORT =/DB_PORT = 3306/" "$ENV_FILE"
 
 echo "" >> "$ENV_FILE"
 echo "# MySQL Root Password (for Docker)" >> "$ENV_FILE"
@@ -62,7 +70,7 @@ echo "MYSQL_ROOT_PASSWORD=$ROOT_PASS" >> "$ENV_FILE"
 echo "Creating nginx.conf file"
 cp "$TEMPLATE_NGINX_FILE" "$NGINX_CONF_FILE"
 
-sed -i "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
+$SED -i "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
 
 echo "Building and starting all containers (web, backend, db)"
 docker-compose up -d --build

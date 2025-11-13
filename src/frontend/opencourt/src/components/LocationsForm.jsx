@@ -31,6 +31,7 @@ function LocationsForm(){
                 setError("Invalid Input");
         }
 
+
         setFormData({location_name: "", address: ""});
         } catch (err) {
             console.error(err);
