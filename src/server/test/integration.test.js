@@ -5,6 +5,8 @@ const fs = require('fs')
 
 
 beforeEach( async () => {
+    await db.restart();
+
     // initialize db tables
     const initDb = fs.readFileSync('./test/database/initTests.sql', 'utf8');
     await db.exec(initDb);
@@ -16,7 +18,7 @@ beforeEach( async () => {
 })
 
 afterEach( async () => {
-    await db.restart()
+    await db.restart();
 })
 
 
