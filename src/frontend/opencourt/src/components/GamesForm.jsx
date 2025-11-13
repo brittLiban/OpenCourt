@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Container } from "@mui/material";
 
 
-function GamesForm(){
+function GamesForm({onAddGame}){
     const [formData, setFormData] = useState({
         game_name: "",
         location_id: ""
@@ -32,6 +32,8 @@ function GamesForm(){
             setError("Invalid Input");
         }
         
+        onAddGame({ game_name: formData.game_name, location_id: formData.location_id });
+
         setFormData({game_name: "", location_id: ""});
         } catch (err) {
         console.error(err);
@@ -43,9 +45,10 @@ function GamesForm(){
             <h3>Add an Event</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                <label>Game Name:</label>
+                <label htmlFor="game_name">Game Name:</label>
                 <input 
                     type="text" 
+                    id="game_name"
                     name= "game_name"
                     value={formData.game_name}
                     onChange={handleChange}
@@ -54,10 +57,11 @@ function GamesForm(){
                 </div>
 
                 <div>
-                <label>Location ID:</label>
+                <label htmlFor="location_id">Location ID:</label>
                 <input 
                     type= "number" 
                     name= "location_id"
+                    id="location_id"
                     value={formData.location_id}
                     onChange={handleChange}
                     onFocus={() => error && setError("")}

@@ -8,6 +8,7 @@
 3. [Prerequisites](#prerequisites)
 4. [VM Setup](#vm-setup)
 5. [Local Setup](#local-setup)
+6. [Testing](#testing)
 
 ## Project Description
 OpenCourt solves the problem of not being able to easily find open play locations for sports like pickleball, basketball, tennis, volleyball, and more.
@@ -198,3 +199,53 @@ If your application freezes (either on the VM or locally) and there have been no
 ```bash
 docker-compose restart
 ```
+
+## Testing
+OpenCourt includes **unit tests** for both the front and backend, **integration tests** and **end to end tests**.
+
+### Running all Unit & Integration Tests
+1. Make sure you followed the steps in [Local Setup](#local-setup) to ensure you have your environment properly set up.
+2. Make script executable and run it:
+    - This will automatically run all tests and exit any necessary terminals making it fast and easy to quickly run a test.
+
+    ```bash
+    chmod +x run-tests.sh
+    ./run-tests.sh
+    ```
+
+### Running all End to End Tests
+A script has been written to help quickly set up a dockerized test environment perfect for end to end testing.
+
+1. Ensure Docker Desktop is running
+2. Make script executable and run it:
+    - This will automatically run and build all docker containers, handle any database configuration and launch the cypress terminal for you to use.
+
+    ```bash
+    chmod +x ./test-scripts/run-e2e-tests.sh
+    ./test-scripts/run-e2e-tests.sh
+    ```
+
+### Have you already built the test environment and want to just run the end to end tests?
+1. Make sure you are in the proper directory for the front-end.
+2. Check that the opencourt_test docker container is running.
+3. Run the following command in your terminal to run **just** the cypress tests.
+```bash
+    npm run cypress
+```
+
+#### Need to test changes you've made in the code?
+```bash
+docker-compose -p opencourt_test -f docker-compose.test.yml up -d
+```
+
+#### Want to clear the test database to prevent dirty data?
+```bash
+docker-compose -p opencourt_test down
+```
+
+#### Troubleshooting
+Here are some common issues you may encounter when running tests:
+1. Docker not running
+   - Docker **must** be installed and running on your machine for any of these tests to work.
+2. template.env or template.nginx.conf not found
+   - Make sure these template files exist in the root directory of your project. The E2E and local-setup script depends on it.

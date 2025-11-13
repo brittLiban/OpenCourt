@@ -26,6 +26,16 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         }
       }
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/tests/setupTests.js',
+      coverage: {
+        provider: 'c8',
+        reporter: ['text', 'json', 'html']
+      },
+      threads: false,
     }
   }
 })
