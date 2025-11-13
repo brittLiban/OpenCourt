@@ -20,10 +20,6 @@ describe('event page', () => {
 
         cy.contains("button", "Add Game").click()
 
-        cy.reload()
-
-        cy.contains('button', 'Events').click()
-
         cy.get("ul").within(() => {
             cy.get('li').last().should('contain', 'Test Game @ Location #2')
         })
@@ -46,9 +42,6 @@ describe('event page', () => {
 
         cy.contains("button", "Add Game").click()
 
-        cy.reload()
-
-        cy.contains('button', 'Events').click()
 
         cy.get("ul").within(() => {
             cy.get('li').last().should('contain', 'Fourth Test Game @ Location #2')
