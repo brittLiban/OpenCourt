@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Container } from "@mui/material";
 
 
-function GamesForm(){
+function GamesForm({onAddGame}){
     const [formData, setFormData] = useState({
         game_name: "",
         location_id: ""
@@ -32,6 +32,8 @@ function GamesForm(){
             setError("Invalid Input");
         }
         
+        onAddGame({ game_name: formData.game_name, location_id: formData.location_id });
+
         setFormData({game_name: "", location_id: ""});
         } catch (err) {
         console.error(err);

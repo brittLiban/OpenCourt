@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
 import { Container, Typography, List, ListItem, ListItemText } from "@mui/material";
-import { getLocations } from "../api/Locations";
 
-function Locations() {
-  const [locations, setLocations] = useState([]);
-
-  useEffect(() => {
-    getLocations()
-      .then(setLocations)
-      .catch((err) => console.error("Error fetching events:", err));
-  }, []);
+function Locations({locations}) {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
