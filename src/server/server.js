@@ -7,6 +7,10 @@ const port = 3000
 app.use(express.json());
 app.use("/api", router)
 
-app.listen(port, () => {
-  console.log(`Open Court API listening on port ${port}`)
-})
+if (process.env.RUN_MODE !== 'test') {
+  app.listen(port, () => {
+    console.log(`Open Court API listening on port ${port}`)
+  })
+}
+
+module.exports = app;
