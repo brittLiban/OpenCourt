@@ -1,7 +1,21 @@
 #!/bin/bash
 
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    SED="sed -i ''"
+elif [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
+    # Windows Git Bash / Cygwin / MSYS
+    SED="sed -i"
+else
+    echo "Unsupported OS: $OSTYPE"
+    exit 1
+fi
+
 DB_USER="test_user"
 DB_NAME="opencourttest"
+DB_PASS="test123"
+ROOT_PASS="rootpass"
 ENV_FILE=".env"
 TEMPLATE_ENV_FILE="template.env"
 NGINX_CONF_FILE="nginx.conf"
@@ -40,20 +54,15 @@ if [ ! -f "$TEMPLATE_NGINX_FILE" ]; then
   exit 1
 fi
 
-echo "Please provide the database passwords:"
-read -sp "Enter a new, strong password for the database user ($DB_USER): " DB_PASS
-echo
-read -sp "Enter a new, strong password for the database ROOT user: " ROOT_PASS
-echo
 
 echo "Creating .env file"
 cp "$TEMPLATE_ENV_FILE" "$ENV_FILE"
 
-sed -i "" "s/DB_HOST = \"\"/DB_HOST = \"db\"/" "$ENV_FILE"
-sed -i "" "s/DB_USER = \"\"/DB_USER = \"$DB_USER\"/" "$ENV_FILE"
-sed -i "" "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FILE"
-sed -i "" "s/DB_NAME = \"\"/DB_NAME = \"$DB_NAME\"/" "$ENV_FILE"
-sed -i "" "s/DB_PORT =/DB_PORT = 3306/" "$ENV_FILE"
+$SED "s/DB_HOST = \"\"/DB_HOST = \"db\"/" "$ENV_FILE"
+$SED "s/DB_USER = \"\"/DB_USER = \"$DB_USER\"/" "$ENV_FILE"
+$SED "s/DB_PASSWORD = \"\"/DB_PASSWORD = \"$DB_PASS\"/" "$ENV_FILE"
+$SED "s/DB_NAME = \"\"/DB_NAME = \"$DB_NAME\"/" "$ENV_FILE"
+$SED "s/DB_PORT =/DB_PORT = 3306/" "$ENV_FILE"
 
 echo "" >> "$ENV_FILE"
 echo "# MySQL Root Password (for Docker)" >> "$ENV_FILE"
@@ -62,7 +71,7 @@ echo "MYSQL_ROOT_PASSWORD=$ROOT_PASS" >> "$ENV_FILE"
 echo "Creating nginx.conf file"
 cp "$TEMPLATE_NGINX_FILE" "$NGINX_CONF_FILE"
 
-sed -i "" "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
+$SED "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
 
 echo "Building and starting all containers (web, backend, db)"
 docker-compose -p opencourt_test -f docker-compose.test.yml up -d --build
