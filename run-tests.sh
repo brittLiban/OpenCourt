@@ -7,7 +7,7 @@ echo "==============================="
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-cd "$SCRIPT_DIR"/test-scripts
+cd "$SCRIPT_DIR"/test-scripts/
 
 echo "SCRIPT_DIR = $SCRIPT_DIR"
 
