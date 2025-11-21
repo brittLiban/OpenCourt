@@ -32,8 +32,12 @@ trap 'error_handler' ERR
 
 echo "Starting OpenCourt LOCAL Setup"
 
-if ! command_exists docker || ! command_exists docker-compose; then
-  echo "Error: 'docker' and 'docker-compose' are required."
+if ! command_exists docker; then
+  echo "Error: 'docker' is required."
+  echo "Please have Docker Desktop running."
+  exit 1
+elif ! docker compose version >/dev/null 2>&1; then
+  echo "Error: 'docker compose' plugin is required."
   echo "Please have Docker Desktop running."
   exit 1
 fi
@@ -73,7 +77,7 @@ cp "$TEMPLATE_NGINX_FILE" "$NGINX_CONF_FILE"
 $SED -i "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
 
 echo "Building and starting all containers (web, backend, db)"
-docker-compose up -d --build
+docker compose up -d --build
 
 echo "---"
 echo "Setup Complete!"

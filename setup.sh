@@ -83,7 +83,7 @@ cp "$TEMPLATE_NGINX_FILE" "$NGINX_CONF_FILE"
 $SED "s|YOUR_SERVER_IP|$VM_IP|" "$NGINX_CONF_FILE"
 
 echo "Building and starting all containers (web, backend, db)"
-docker-compose up -d --build
+docker compose up -d --build
 
 echo "---"
 echo "Setup Complete!"

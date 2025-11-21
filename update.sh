@@ -13,6 +13,6 @@ echo "Pulling latest code from Git"
 git pull
 
 echo "Rebuilding and restarting containers"
-docker-compose up -d --build
+docker compose up -d --build
 
 echo "--- Update Complete ---"
