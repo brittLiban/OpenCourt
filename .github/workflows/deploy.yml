@@ -4,7 +4,8 @@ on:
     push:
         branches:
         - main #every time their is a push to main 
-
+    workflow_dispatch:
+    
 jobs:
     deploy_vm:
         runs-on: ubuntu-latest
@@ -28,3 +29,4 @@ jobs:
                 docker-compose down
                 docker-compose up -d --build
                 EOF
+
