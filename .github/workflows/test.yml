@@ -51,3 +51,24 @@ jobs:
           else
             echo "No test:integration script found, skipping."
           fi
+      # Frontend unit tests (Vitest)
+
+      - name: Run frontend unit tests
+        working-directory: src/frontend/opencourt
+        run: |
+          if npm run | grep -q "test:unit"; then
+            npm run test:unit
+          else
+            npm test
+          fi
+
+      #  End-to-end tests
+
+      - name: Run end-to-end tests
+        working-directory: src/frontend/opencourt
+        run: |
+          if npm run | grep -q "test:e2e"; then
+            npm run test:e2e
+          else
+            echo "No test:e2e script found, skipping."
+          fi
