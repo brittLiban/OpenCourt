@@ -171,6 +171,41 @@ This will pull the latest code and rebuild only the necessary containers. Your d
     ```bash
     docker-compose down -v
     ```
+### Continuous Integration (CI)
+
+This project uses GitHub Actions to automatically run all tests on every push and pull request.
+
+## CI Workflow
+
+The workflow is located in:
+
+.github/workflows/test.yml
+
+## What CI Runs
+
+- Backend unit tests
+
+- Backend integration tests
+
+- Frontend unit tests (Vitest)
+
+- End-to-end tests
+
+## How It Works
+
+- Checks out the repository
+
+- Sets up Node.js
+
+- Installs backend & frontend dependencies
+
+- Runs all available test scripts
+
+- Fails the workflow if any test fails
+
+## Manual Run
+
+Go to Actions -> CI - Tests -> Run CI on feature/ci-merging -> Re-run all jobs.
 
 ## Local Setup
 1. Clone the repo:
