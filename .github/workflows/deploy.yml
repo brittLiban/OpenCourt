@@ -26,7 +26,8 @@ jobs:
                 ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.VM_PORT }} ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
                 cd ~/OpenCourt || exit
                 git pull origin main
-                docker-compose down
-                docker-compose up -d --build
+                docker compose down
+                docker compose up -d --build
                 EOF
+
 
