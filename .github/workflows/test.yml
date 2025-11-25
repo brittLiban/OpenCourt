@@ -1,0 +1,78 @@
+name: CI - Tests
+
+on:
+  push:
+    branches:
+    - main
+    - dev
+    - feature/ci-merging 
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Backend deps
+      - name: Install backend dependencies
+        working-directory: src/server
+        run: npm ci
+      
+      # Frontend deps 
+      - name: Install frontend dependencies
+        working-directory: src/frontend/opencourt
+        run: npm ci
+
+      # Backend unit tests
+
+      - name: Run backend unit tests
+        working-directory: src/server
+        run: |
+          if npm run | grep -q "test:unit"; then
+            npm run test:unit -- --runInBand
+          else
+            npm test -- --runInBand
+          fi
+
+      #  Backend integration tests 
+  
+      - name: Run backend integration tests
+        working-directory: src/server
+        run: |
+          if npm run | grep -q "test:integration"; then
+            npm run test:integration -- --runInBand
+          else
+            echo "No test:integration script found, skipping."
+          fi
+      # Frontend unit tests (Vitest)
+
+      - name: Run frontend unit tests
+        working-directory: src/frontend/opencourt
+        run: |
+          if npm run | grep -q "test:unit"; then
+            npm run test:unit
+          else
+            npm test
+          fi
+
+      #  End-to-end tests
+
+      - name: Run end-to-end tests
+        working-directory: src/frontend/opencourt
+        run: |
+          if npm run | grep -q "test:e2e"; then
+            npm run test:e2e
+          else
+            echo "No test:e2e script found, skipping."
+          fi
